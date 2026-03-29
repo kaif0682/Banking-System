@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank - Account Balance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #1a2a6c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 15px;
+        }
+        
+        .logout-btn {
+            background: white;
+            color: #1a2a6c;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+        
+        .nav-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #1a2a6c;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .balance-card {
+            width: 100%;
+            max-width: 500px;
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .balance-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .balance-amount {
+            font-size: 48px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .account-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .account-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                💳 SecureBank
+            </div>
+            <div class="user-info">
+                <span>Welcome, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            </div>
+        </header>
+        
+        <div class="app-container">
+            <div class="sidebar">
+                <a href="{% url 'dashboard' %}" style="text-decoration: none; color: inherit;">
+                    <div class="nav-item">
+                        🏠 Dashboard
+                    </div>
+                </a>
+                <div class="nav-item active">
+                    💰 Check Balance
+                </div>
+                <a href="{% url 'withdraw' %}" style="text-decoration: none; color: inherit;">
+                    <div class="nav-item">
+                        💵 Withdraw Funds
+                    </div>
+                </a>
+            </div>
+            
+            <div class="main-content">
+                <div class="balance-card">
+                    <h3 class="balance-title">Available Balance</h3>
+                    <div class="balance-amount">${{ account.balance }}</div>
+                    <div class="account-info">
+                        <div>
+                            <p>Account Number</p>
+                            <strong>{{ account.account_number }}</strong>
+                        </div>
+                        <div>
+                            <p>Account Holder</p>
+                            <strong>{{ user.username }}</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="{% url 'dashboard' %}" class="back-btn">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

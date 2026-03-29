@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #1a2a6c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info span {
+            margin-right: 15px;
+        }
+        
+        .logout-btn {
+            background: white;
+            color: #1a2a6c;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+        
+        .nav-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #1a2a6c;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background: #f5f5f5;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .balance-card {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            color: white;
+            text-align: center;
+        }
+        
+        .balance-amount {
+            font-size: 36px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .account-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .transaction-history {
+            margin-top: 30px;
+        }
+        
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .withdraw {
+            color: #e74c3c;
+        }
+        
+        .deposit {
+            color: #2ecc71;
+        }
+        
+        .messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .balance-card {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                💳 SecureBank
+            </div>
+            <div class="user-info">
+                <span>Welcome, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            </div>
+        </header>
+        
+        <div class="app-container">
+            <div class="sidebar">
+                <div class="nav-item active">
+                    🏠 Dashboard
+                </div>
+                <a href="{% url 'balance' %}" style="text-decoration: none; color: inherit;">
+                    <div class="nav-item">
+                        💰 Check Balance
+                    </div>
+                </a>
+                <a href="{% url 'withdraw' %}" style="text-decoration: none; color: inherit;">
+                    <div class="nav-item">
+                        💵 Withdraw Funds
+                    </div>
+                </a>
+            </div>
+            
+            <div class="main-content">
+                <h2>Account Dashboard</h2>
+                
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="dashboard">
+                    <div class="card balance-card">
+                        <h3>Available Balance</h3>
+                        <div class="balance-amount">${{ account.balance }}</div>
+                        <div class="account-info">
+                            <div>
+                                <p>Account Number</p>
+                                <strong>{{ account.account_number }}</strong>
+                            </div>
+                            <div>
+                                <p>Account Type</p>
+                                <strong>Savings</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Quick Actions</h3>
+                        <div class="quick-actions">
+                            <a href="{% url 'balance' %}" class="action-btn">Check Balance</a>
+                            <a href="{% url 'withdraw' %}" class="action-btn">Withdraw Funds</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="transaction-history">
+                    <h2>Recent Transactions</h2>
+                    <div class="card">
+                        {% for transaction in transactions %}
+                        <div class="transaction-item">
+                            <div>
+                                <strong>{{ transaction.get_transaction_type_display }}</strong>
+                                <p>{{ transaction.created_at }}</p>
+                            </div>
+                            <div class="{% if transaction.transaction_type == 'withdrawal' %}withdraw{% else %}deposit{% endif %}">
+                                {% if transaction.transaction_type == 'withdrawal' %}-{% else %}+{% endif %}${{ transaction.amount }}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="transaction-item">
+                            <p>No transactions found.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
