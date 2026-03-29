@@ -55,8 +55,6 @@ ROOT_URLCONF = 'banking.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        # 'DIRS': [BASE_DIR / 'templates' / 'accounts'],
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -75,16 +73,7 @@ WSGI_APPLICATION = 'banking.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'banking_db',
-#         'USER': 'banking_user',
-#         'PASSWORD': 'kaif0682',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
